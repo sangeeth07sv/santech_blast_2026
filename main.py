@@ -1,15 +1,43 @@
-"""Convenience entrypoint so the app can be run as `python main.py`
-or referenced by platforms (like Render) as `main:app`.
+"""
+BLAST 2026 FastAPI Backend
 """
 
-from app.main import app
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-__all__ = ["app"]
+app = FastAPI(
+    title="BLAST 2026 API",
+    version="1.0.0"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.get("/")
+def home():
+    return {
+        "message": "BLAST 2026 API running 🚀"
+    }
+
+
+@app.get("/health")
+def health():
+    return {
+        "status": "ok"
+    }
+
 
 if __name__ == "__main__":
     import uvicorn
 
-    from app.config import get_settings
-
-    settings = get_settings()
-    uvicorn.run("main:app", host="0.0.0.0", port=settings.port, reload=True)
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=True
