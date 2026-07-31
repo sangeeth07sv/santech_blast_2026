@@ -11,4 +11,4 @@ services:
       - key: FIREBASE_PROJECT_ID
         sync: false
       - key: ALLOWED_ORIGINS
-        value: https://your-frontend.vercel.app
+        value: "*"
