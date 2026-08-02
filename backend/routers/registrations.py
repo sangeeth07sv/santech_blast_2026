@@ -1,10 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from database import supabase
-from schemas import RegistrationCreate
 import traceback
-
-router = APIRouter()
-
 
 @router.post("/register")
 def register(data: RegistrationCreate):
@@ -32,14 +27,18 @@ def register(data: RegistrationCreate):
             .execute()
         )
 
-        print("INSERT RESULT:", result)
-        print("INSERT DATA:", result.data)
-
         return {
             "message": "Registration successful!",
             "registration_id": result.data[0]["id"]
         }
 
-    except Exception as e:
+    except HTTPException:
+        # Return FastAPI HTTP errors unchanged
+        raise
+
+    except Exception:
         traceback.print_exc()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(
+            status_code=500,
+            detail="Internal Server Error"
+        )
