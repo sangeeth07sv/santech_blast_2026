@@ -1,14 +1,14 @@
-"""
-BLAST 2026 FastAPI Backend
-"""
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from routers.registrations import router
+
+
 app = FastAPI(
     title="BLAST 2026 API",
-    version="1.0.0",
+    version="2.0.0"
 )
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -19,26 +19,18 @@ app.add_middleware(
 )
 
 
+app.include_router(router)
+
+
 @app.get("/")
 def home():
     return {
-        "message": "BLAST 2026 API running 🚀"
+        "message":"BLAST 2026 API running 🚀"
     }
 
 
 @app.get("/health")
 def health():
     return {
-        "status": "ok"
+        "status":"ok"
     }
-
-
-if __name__ == "__main__":
-    import uvicorn
-
-    uvicorn.run(
-        "main:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=True,
-    )
