@@ -1,5 +1,12 @@
 import { initializeApp, getApps, type FirebaseApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, type Auth } from "firebase/auth";
+import {
+  initializeAuth,
+  browserLocalPersistence,
+  indexedDBLocalPersistence,
+  browserPopupRedirectResolver,
+  GoogleAuthProvider,
+  type Auth,
+} from "firebase/auth";
 import { getFirestore, type Firestore } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -20,6 +27,11 @@ function getFirebaseApp(): FirebaseApp {
 }
 
 export const firebaseApp: FirebaseApp = getFirebaseApp();
-export const auth: Auth = getAuth(firebaseApp);
+
+export const auth: Auth = initializeAuth(firebaseApp, {
+  persistence: [indexedDBLocalPersistence, browserLocalPersistence],
+  popupRedirectResolver: browserPopupRedirectResolver,
+});
+
 export const db: Firestore = getFirestore(firebaseApp);
 export const googleProvider: GoogleAuthProvider = new GoogleAuthProvider();
