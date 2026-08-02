@@ -29,12 +29,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Catch the user coming back from Google's redirect
-    getRedirectResult(auth).catch((error) => {
-      console.error("Google redirect sign-in error:", error);
-    });
+    getRedirectResult(auth)
+      .then((result) => {
+        console.log("Redirect result:", result);
+      })
+      .catch((error) => {
+        console.error("Google redirect sign-in error:", error);
+      });
 
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      console.log("Auth state changed:", firebaseUser);
       setUser(firebaseUser);
       setLoading(false);
     });
