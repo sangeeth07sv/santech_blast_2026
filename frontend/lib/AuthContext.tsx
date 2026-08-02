@@ -8,8 +8,7 @@ import {
 } from "react";
 import {
   onAuthStateChanged,
-  signInWithRedirect,
-  getRedirectResult,
+  signInWithPopup,
   signOut,
   type User,
 } from "firebase/auth";
@@ -29,16 +28,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    getRedirectResult(auth)
-      .then((result) => {
-        console.log("Redirect result:", result);
-      })
-      .catch((error) => {
-        console.error("Google redirect sign-in error:", error);
-      });
-
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      console.log("Auth state changed:", firebaseUser);
       setUser(firebaseUser);
       setLoading(false);
     });
@@ -46,7 +36,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   async function loginWithGoogle(): Promise<void> {
-    await signInWithRedirect(auth, googleProvider);
+    await signInWithPopup(auth, googleProvider);
   }
 
   async function logout(): Promise<void> {
@@ -56,14 +46,3 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return (
     <AuthContext.Provider value={{ user, loading, loginWithGoogle, logout }}>
       {children}
-    </AuthContext.Provider>
-  );
-}
-
-export function useAuth(): AuthContextValue {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
-}
