@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title="BLAST 2026 API",
-    version="1.0.0"
+    version="1.0.0",
 )
 
 app.add_middleware(
@@ -40,4 +40,5 @@ if __name__ == "__main__":
         "main:app",
         host="0.0.0.0",
         port=8000,
-        reload=True
+        reload=True,
+    )
