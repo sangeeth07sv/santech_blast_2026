@@ -1,9 +1,16 @@
 from fastapi import APIRouter, HTTPException
 import traceback
 
+from database import supabase
+from schemas import RegistrationCreate
+
+router = APIRouter()
+
+
 @router.post("/register")
 def register(data: RegistrationCreate):
     try:
+        # Prevent duplicate registration
         if data.uid:
             existing = (
                 supabase
@@ -33,7 +40,6 @@ def register(data: RegistrationCreate):
         }
 
     except HTTPException:
-        # Return FastAPI HTTP errors unchanged
         raise
 
     except Exception:
@@ -42,3 +48,18 @@ def register(data: RegistrationCreate):
             status_code=500,
             detail="Internal Server Error"
         )
+
+
+@router.get("/registrations")
+def get_registrations(uid: str):
+    result = (
+        supabase
+        .table("registrations")
+        .select("*")
+        .eq("uid", uid)
+        .execute()
+    )
+
+    return {
+        "registrations": result.data
+    }
