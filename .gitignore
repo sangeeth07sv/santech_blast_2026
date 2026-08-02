@@ -1,9 +1,23 @@
-__pycache__/
+cat > .gitignore << 'EOF'
+# Node
+node_modules/
+frontend/node_modules/
+frontend/.next/
+
+# Python
+backend/__pycache__/
+backend/.venv/
+backend/venv/
 *.pyc
-.env
-venv/
-.venv/
-serviceAccountKey.json
-*.egg-info/
-.pytest_cache/
-node_modules
+
+# Environment
+frontend/.env.local
+backend/.env
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+EOF
