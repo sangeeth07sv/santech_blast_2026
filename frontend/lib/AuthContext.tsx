@@ -42,8 +42,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   async function loginWithGoogle(): Promise<void> {
-    await setPersistence(auth, browserLocalPersistence);
-    await signInWithPopup(auth, googleProvider);
+    return signInWithPopup(auth, googleProvider).then(() => undefined);
   }
 
   async function logout(): Promise<void> {
